@@ -1,0 +1,61 @@
+services:
+  filial1:
+    build:
+      context: .
+      dockerfile: Dockerfile.filial1
+    container_name: filial1
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - ROLE=filial1
+      - SDWAN_ENABLED=true
+    networks:
+      mgmt:
+        ipv4_address: 172.20.0.11
+      channel_a:
+        ipv4_address: 10.0.1.11
+      channel_b:
+        ipv4_address: 10.0.2.11
+    volumes:
+      - ./filial1/ipsec:/etc/swanctl/conf.d/
+
+  filial2:
+    build:
+      context: .
+      dockerfile: Dockerfile.filial2
+    container_name: filial2
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - ROLE=filial2
+      - SDWAN_ENABLED=true
+    networks:
+      mgmt:
+        ipv4_address: 172.20.0.12
+      channel_a:
+        ipv4_address: 10.0.1.12
+      channel_b:
+        ipv4_address: 10.0.2.12
+    volumes:
+      - ./filial2/ipsec:/etc/swanctl/conf.d/
+
+networks:
+  mgmt:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+  channel_a:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.1.0/24
+  channel_b:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.2.0/24

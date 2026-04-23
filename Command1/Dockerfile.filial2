@@ -1,0 +1,20 @@
+FROM alpine:latest
+
+RUN apk add --no-cache \
+    bash \
+    iproute2 \
+    iptables \
+    tcpdump \
+    wireguard-tools \
+    strongswan \
+    python3 \
+    py3-pip \
+    netcat-openbsd \
+    curl
+
+WORKDIR /app
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
