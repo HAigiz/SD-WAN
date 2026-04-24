@@ -8,7 +8,7 @@ mkdir -p filial1/ipsec filial2/ipsec
 cat > filial1/ipsec/swanctl.conf << EOF
 connections {
     rw {
-        local_addrs  = 10.0.1.11  # Жесткая привязка к Каналу А
+        local_addrs  = 10.0.1.11
         remote_addrs = 10.0.1.12
         local {
             auth = psk
