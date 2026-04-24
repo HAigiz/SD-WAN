@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# 1. Генерируем ключи
 PRIVATE_KEY_FILIAL1=$(wg genkey)
 PUBLIC_KEY_FILIAL1=$(echo "$PRIVATE_KEY_FILIAL1" | wg pubkey)
 
@@ -9,7 +8,6 @@ PUBLIC_KEY_FILIAL2=$(echo "$PRIVATE_KEY_FILIAL2" | wg pubkey)
 
 mkdir -p filial1/scripts filial2/scripts
 
-# 2. Конфиги WireGuard
 cat > filial1/wg0.conf << EOF
 [Interface]
 Address = 192.168.100.1/30
@@ -32,7 +30,6 @@ Endpoint = 10.0.1.11:51820
 AllowedIPs = 192.168.100.0/24, 192.168.200.0/24
 EOF
 
-# 3. Функция для создания Python-скрипта (теперь ключ вставляется прямо в код)
 create_monitor() {
     local target_file=$1
     local peer_pubkey=$2
@@ -44,7 +41,6 @@ create_monitor() {
 import os, re, time, subprocess
 from collections import deque
 
-# КЛЮЧИ ТЕПЕРЬ ТУТ ЖЕСТКО
 WG_INTERFACE = "wg0"
 WG_PEER_PUBKEY = "$peer_pubkey"
 ENDPOINT_A = "$endp_a"
@@ -90,7 +86,6 @@ def main():
         avg_r_a = sum(x[0] for x in hist_a) / len(hist_a)
         avg_r_b = sum(x[0] for x in hist_b) / len(hist_b)
 
-        # Логика: приоритет Каналу B (быстрый), если он живой
         best = "B" if avg_l_b < LOSS_THRESHOLD else ("A" if avg_l_a < LOSS_THRESHOLD else None)
         
         if best and best != current:
@@ -105,7 +100,6 @@ if __name__ == '__main__':
 EOF
 }
 
-# 4. Генерируем скрипты для каждого филиала с ИХ данными
 create_monitor "filial1/scripts/sdwan_monitor.py" "$PUBLIC_KEY_FILIAL2" "10.0.1.12:51820" "10.0.2.12:51820"
 create_monitor "filial2/scripts/sdwan_monitor.py" "$PUBLIC_KEY_FILIAL1" "10.0.1.11:51820" "10.0.2.11:51820"
 
