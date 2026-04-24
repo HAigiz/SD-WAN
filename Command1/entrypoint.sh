@@ -18,5 +18,4 @@ sleep 2
 swanctl --load-all
 swanctl --initiate --child net-net
 
-# 5. Якорь
 tail -f /dev/null
