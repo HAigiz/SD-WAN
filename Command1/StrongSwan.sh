@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Общий секрет для обоих филиалов
 SHARED_SECRET="SuperSecretIPsecKey123"
 
 mkdir -p filial1/ipsec filial2/ipsec
